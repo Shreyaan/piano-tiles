@@ -2,7 +2,7 @@ const WIDTH = 90;
 const HEIGHT = 140;
 var rightTile = {};
 var highScore = 0;
-highScore = (Number(localStorage.getItem("highScore")) ?? 0) 
+highScore = Number(localStorage.getItem("highScore")) ?? 0;
 // document.getElementById('highscore').innerHTML = highScore;
 const WINNING_SCORE = 3000;
 let timeLimit = 10;
@@ -26,7 +26,7 @@ function setup() {
   let myCanvas = createCanvas(361, 561);
   myCanvas.parent("game");
 
-  time = -1;
+  time = -3;
   score = 0;
   soundA = loadSound("assets/soundA.mp3");
   soundH = loadSound("assets/soundH.mp3");
@@ -62,16 +62,16 @@ function game() {
   drawTiles();
 
   handleState();
-  var textColor = 'white'
+  var textColor = "white";
   textSize(60);
   fill(textColor);
-  text('A', WIDTH/2, HEIGHT*4-50);
+  text("A", WIDTH / 2, HEIGHT * 4 - 50);
   fill(textColor);
-  text('S', WIDTH*1.5, HEIGHT*4-50);
+  text("S", WIDTH * 1.5, HEIGHT * 4 - 50);
   fill(textColor);
-  text('D', WIDTH*2.5, HEIGHT*4-50);
+  text("D", WIDTH * 2.5, HEIGHT * 4 - 50);
   fill(textColor);
-  text('F', WIDTH*3.5, HEIGHT*4-50);
+  text("F", WIDTH * 3.5, HEIGHT * 4 - 50);
 }
 
 function drawTiles() {
@@ -109,10 +109,11 @@ function handleState() {
     /* draw time */
     textSize(40);
     fill("#00aeff");
-    text(`${score} `, width / 2, HEIGHT-100);
-    document.querySelector('hr').style.width = (getTime()* 361/timeLimit)+ 'px'
+    text(`${score} `, width / 2, HEIGHT - 100);
+    document.querySelector("hr").style.width =
+      (getTime() * 361) / timeLimit + "px";
     time++;
-    if (time ==timeLimit*100) {
+    if (time == timeLimit * 100) {
       playing = false;
     }
   }
@@ -120,10 +121,10 @@ function handleState() {
 
 function drawEnd(won) {
   if (won) {
-    if(score > highScore) {
+    if (score > highScore) {
       highScore = score;
       localStorage.setItem("highScore", highScore);
-      document.getElementById('highscore').innerHTML = highScore;
+      document.getElementById("highscore").innerHTML = highScore;
     }
     background("#66EE66");
 
@@ -139,10 +140,10 @@ function drawEnd(won) {
     textSize(40);
     text("Press R to restart!", width / 2, height / 2 + 50);
   } else {
-    if(score > highScore) {
+    if (score > highScore) {
       highScore = score;
       localStorage.setItem("highScore", highScore);
-      document.getElementById('highscore').innerHTML = highScore;
+      document.getElementById("highscore").innerHTML = highScore;
     }
     fill("#FF00FF");
     textSize(60);
@@ -154,51 +155,50 @@ function drawEnd(won) {
 
 function keyPressed() {
   if (!playing) return;
-  
-    var tile 
-    if(keyCode == 65) {
-       tile = getClickedTile(0);
-    }
-    if(keyCode == 83) {
-       tile = getClickedTile(91);
-    }
-    if(keyCode == 68) {
-       tile = getClickedTile(181);
-    }
-    if(keyCode ==  70) {
-       tile = getClickedTile(271);
-    }
-    if (tile == -1) return;
 
-    if (tiles[tile] !== 0) {
-      tiles[tile] = -1;
-      soundA.play();
-      won = false;
+  var tile=-1
+  if (keyCode == 65) {
+    tile = getClickedTile(0);
+  }
+  if (keyCode == 83) {
+    tile = getClickedTile(91);
+  }
+  if (keyCode == 68) {
+    tile = getClickedTile(181);
+  }
+  if (keyCode == 70) {
+    tile = getClickedTile(271);
+  }
+  if (tile == -1) return;
+
+  if (tiles[tile] !== 0) {
+    tiles[tile] = -1;
+    soundA.play();
+    won = false;
+    playing = false;
+  } else {
+    score++;
+    newRow();
+    switch (tile) {
+      case 12:
+        soundL.play();
+        break;
+      case 13:
+        soundN.play();
+        break;
+      case 14:
+        soundP.play();
+        break;
+      case 15:
+        soundQ.play();
+        break;
+    }
+
+    if (score >= WINNING_SCORE) {
+      won = true;
       playing = false;
-    } else {
-      score++;
-      newRow();
-      switch (tile) {
-        case 12:
-          soundL.play();
-          break;
-        case 13:
-          soundN.play();
-          break;
-        case 14:
-          soundP.play();
-          break;
-        case 15:
-          soundQ.play();
-          break;
-      }
-
-      if (score >= WINNING_SCORE) {
-        won = true;
-        playing = false;
-      }
     }
-  
+  }
 }
 function mouseClicked() {
   if (!playing) return;
