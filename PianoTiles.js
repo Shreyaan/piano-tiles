@@ -156,7 +156,7 @@ function drawEnd(won) {
 function keyPressed() {
   if (!playing) return;
 
-  var tile;
+  var tile=-1
   if (keyCode == 65) {
     tile = getClickedTile(0);
   }
