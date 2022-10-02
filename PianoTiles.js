@@ -26,7 +26,7 @@ function setup() {
   let myCanvas = createCanvas(361, 561);
   myCanvas.parent("game");
 
-  time = -3;
+  time = -1;
   score = 0;
   soundA = loadSound("assets/soundA.mp3");
   soundH = loadSound("assets/soundH.mp3");
